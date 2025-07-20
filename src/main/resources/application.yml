@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: Restoran
+  datasource:
+    username: postgres
+    password: postgresachyl1
+    url: jdbc:postgresql://localhost:5432/postgres
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+    show-sql: true
+    properties:
+      hibernate:
+        default_schema: rest
+server:
+  port: 8081
