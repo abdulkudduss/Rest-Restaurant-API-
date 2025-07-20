@@ -1,11 +1,13 @@
 package ru.aks.restoran.dto.RestoranDto;
 
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;
+import lombok.experimental.FieldDefaults;
 import ru.aks.restoran.enums.RestaurantType;
 
-@Builder
 
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class RestoranResponse {
     Long id;
     String name;

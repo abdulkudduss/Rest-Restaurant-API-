@@ -14,6 +14,14 @@ public class SimpleResponse {
     HttpStatus httpStatus;
     String message;
 
+    public SimpleResponse() {
+    }
+
+    public SimpleResponse(HttpStatus httpStatus, String message) {
+        this.httpStatus = httpStatus;
+        this.message = message;
+    }
+
     public HttpStatus getHttpStatus() {
         return httpStatus;
     }

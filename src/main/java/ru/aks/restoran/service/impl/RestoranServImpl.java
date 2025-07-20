@@ -10,6 +10,7 @@ import ru.aks.restoran.repositories.RestoranRepo;
 import ru.aks.restoran.service.RestoranServ;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 
@@ -44,8 +45,20 @@ public class RestoranServImpl implements RestoranServ {
 
     @Override
     public List<RestoranResponse> getAllRestaurants() {
-        return null;
+        return restoranRepo.findAll().stream()
+                .map(this::mapToRestaurantResp).collect(Collectors.toList());
     }
+
+    private RestoranResponse mapToRestaurantResp(Restaurant restaurant) {
+        RestoranResponse restoranResponse = new RestoranResponse();
+        restoranResponse.setId(restaurant.getId());
+        restoranResponse.setLocation(restaurant.getLocation());
+        restoranResponse.setName(restaurant.getName());
+        restoranResponse.setType(restaurant.getType());
+        restoranResponse.setService(restaurant.getService());
+        // restoranResponse.setNumberOfEmployees();
+        return restoranResponse;
+        }
 
     @Override
     public SimpleResponse updateById(Long id, RestoranResponse restoranResponse) {

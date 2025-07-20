@@ -86,7 +86,7 @@ public class AuthServImpl implements AuthServ {
         user.setPhone(request.getPhone());
         user.setRole(request.getRole());
         user.setExperience(request.getExperience());
-
+        user.setBirthDate(request.getBirthDate());
         user.setApproved(false);
         user.setRejected(false);
        Restaurant restaurant= restoranRepo.findById(request.getRestoranId())

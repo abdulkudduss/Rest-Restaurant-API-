@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.aks.restoran.dto.auth.JwtResponse;
 import ru.aks.restoran.dto.auth.LoginRequest;
 import ru.aks.restoran.dto.user.UserRequest;
+import ru.aks.restoran.service.AuthServ;
 import ru.aks.restoran.service.impl.AuthServImpl;
 
 
@@ -18,10 +19,10 @@ import ru.aks.restoran.service.impl.AuthServImpl;
 
 public class AuthController {
 
-    private final AuthServImpl authServ;
+    private final AuthServ authServ;
 
 
-    public AuthController( AuthServImpl authServ) {
+    public AuthController( AuthServ authServ) {
         this.authServ= authServ;
 
     }
