@@ -2,30 +2,31 @@ package ru.aks.restoran.service.impl;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.server.ResponseStatusException;
 import ru.aks.restoran.dto.SimpleResponse;
 import ru.aks.restoran.dto.user.UserResponse;
 import ru.aks.restoran.entities.Restaurant;
 import ru.aks.restoran.entities.User;
 import ru.aks.restoran.enums.Role;
+import ru.aks.restoran.mapper.UserMapper;
 import ru.aks.restoran.repositories.RestoranRepo;
 import ru.aks.restoran.repositories.UserRepo;
 import ru.aks.restoran.service.UserServ;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
 public class UserServImpl implements UserServ {
     private final UserRepo userRepository;
     private final RestoranRepo restoranRepo;
+    private final UserMapper userMapper;
 
-    public UserServImpl(UserRepo userRepository, RestoranRepo restoranRepo) {
+    public UserServImpl(UserRepo userRepository, RestoranRepo restoranRepo, UserMapper userMapper) {
         this.userRepository = userRepository;
         this.restoranRepo = restoranRepo;
+        this.userMapper = userMapper;
     }
 
     @Override
@@ -33,7 +34,8 @@ public class UserServImpl implements UserServ {
 
         List<UserResponse> pending = userRepository.findAll().stream()
                 .filter(user -> !user.isApproved() && !user.isRejected() && user.getRole() != Role.ADMIN)
-                .map(this::mapToResponse)
+                //.map(this:: mapToResponse)
+                .map(userMapper::requestDto)
                 .collect(Collectors.toList());
 
 

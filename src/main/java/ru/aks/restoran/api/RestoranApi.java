@@ -18,16 +18,23 @@ public class RestoranApi {
     public RestoranApi(RestoranServ restoranServ) {
         this.restoranServ = restoranServ;
     }
-@GetMapping
-@PreAuthorize("hasRole('ADMIN')")
-    public List<RestoranResponse> allRestaurants(){
+
+    @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<RestoranResponse> allRestaurants() {
         return restoranServ.getAllRestaurants();
     }
+
     @PostMapping()
     @PreAuthorize("hasRole('ADMIN')")
-    public SimpleResponse saveRestaurant (@RequestBody RestoranRequest restoranRequest) {
+    public SimpleResponse saveRestaurant(@RequestBody RestoranRequest restoranRequest) {
 
         return restoranServ.save(restoranRequest);
     }
 
+    @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public RestoranResponse getRestaurantByID(@PathVariable Long id) {
+        return restoranServ.getById(id);
+    }
 }

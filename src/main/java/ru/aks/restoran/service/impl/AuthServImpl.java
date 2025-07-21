@@ -14,11 +14,10 @@ import ru.aks.restoran.dto.user.UserRequest;
 import ru.aks.restoran.entities.Restaurant;
 import ru.aks.restoran.entities.User;
 import ru.aks.restoran.enums.Role;
+import ru.aks.restoran.mapper.UserRequestMap;
 import ru.aks.restoran.repositories.RestoranRepo;
 import ru.aks.restoran.repositories.UserRepo;
 import ru.aks.restoran.service.AuthServ;
-
-import java.util.List;
 
 
 @Service
@@ -27,13 +26,15 @@ public class AuthServImpl implements AuthServ {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authManager;
     private final JwtUtil jwtUtil;
+    private final UserRequestMap userRequestMap;
     private final RestoranRepo restoranRepo;
 
-    public AuthServImpl(UserRepo userRepository, PasswordEncoder passwordEncoder, AuthenticationManager authManager, JwtUtil jwtUtil, RestoranRepo restoranRepo) {
+    public AuthServImpl(UserRepo userRepository, PasswordEncoder passwordEncoder, AuthenticationManager authManager, JwtUtil jwtUtil, UserRequestMap userRequestMap, RestoranRepo restoranRepo) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.authManager = authManager;
         this.jwtUtil = jwtUtil;
+        this.userRequestMap = userRequestMap;
         this.restoranRepo = restoranRepo;
     }
 
@@ -78,20 +79,23 @@ public class AuthServImpl implements AuthServ {
         if (userRepository.existsByEmail(request.getEmail())) {
             throw new BadRequestException("Email уже используется");
         }
-        User user = new User();
-        user.setFirstName(request.getFirstName());
-        user.setLastName(request.getLastName());
-        user.setEmail(request.getEmail());
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setPhone(request.getPhone());
-        user.setRole(request.getRole());
-        user.setExperience(request.getExperience());
-        user.setBirthDate(request.getBirthDate());
-        user.setApproved(false);
-        user.setRejected(false);
-       Restaurant restaurant= restoranRepo.findById(request.getRestoranId())
+
+        User user =userRequestMap.toEntity(request);
+//        user.setFirstName(request.getFirstName());
+//        user.setLastName(request.getLastName());
+//        user.setEmail(request.getEmail());
+//        user.setPassword(passwordEncoder.encode(request.getPassword()));
+//        user.setPhone(request.getPhone());
+//        user.setRole(request.getRole());
+//        user.setExperience(request.getExperience());
+//        user.setBirthDate(request.getBirthDate());
+//        user.setApproved(false);
+//        user.setRejected(false);
+         Restaurant restaurant= restoranRepo.findById(request.getRestoranId())
                .orElseThrow(()-> new BadRequestException("Ресторан  не найден!!"));
-      user.setRestaurant(restaurant);
-       userRepository.save(user);
+        user.setRestaurant(restaurant);
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        userRepository.save(user);
+        //userRepository.save(userRequestMap.toEntity(request));
     }
 }

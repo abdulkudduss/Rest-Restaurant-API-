@@ -10,6 +10,7 @@ import ru.aks.restoran.repositories.RestoranRepo;
 import ru.aks.restoran.service.RestoranServ;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Service
@@ -40,7 +41,8 @@ public class RestoranServImpl implements RestoranServ {
 
     @Override
     public RestoranResponse getById(Long id) {
-        return null;
+        return mapToRestaurantResp(restoranRepo.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("User not found")));
     }
 
     @Override
@@ -56,9 +58,9 @@ public class RestoranServImpl implements RestoranServ {
         restoranResponse.setName(restaurant.getName());
         restoranResponse.setType(restaurant.getType());
         restoranResponse.setService(restaurant.getService());
-        // restoranResponse.setNumberOfEmployees();
+        restoranResponse.setNumberOfEmployees(restaurant.getUsers().size());
         return restoranResponse;
-        }
+    }
 
     @Override
     public SimpleResponse updateById(Long id, RestoranResponse restoranResponse) {
